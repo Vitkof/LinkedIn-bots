@@ -1,19 +1,23 @@
-var countOfPagesScrolled = 3;
+var countOfPagesScrolled = 10;
 var contactsNum = 0;
 
-function pageScroll(countOfPagesScrolled){
+async function pageScroll(countOfPagesScrolled){
 
-    sendRequest();
+    if (contactsNum > 0) {
+        await sleep(7000);
+    }
+
+    scroll(0, document.body.clientHeight);
+
+    await sendRequest();
+    console.log('Pages left: ' + --countOfPagesScrolled);
     var btnNext = document.querySelector('[aria-label="Next"]');
 
-    setTimeout(function(){
-
-		if(countOfPagesScrolled > 0){
-		    btnNext.click();
-			pageScroll(--countOfPagesScrolled);
-		}else
-			return;
-	}, 15000);
+    if(countOfPagesScrolled > 0){
+        btnNext.click();
+        pageScroll(countOfPagesScrolled);
+    }else
+        return;
 }
 
 
@@ -47,14 +51,12 @@ async function sendRequest(){
 
 	var elements = document.getElementsByClassName('artdeco-button artdeco-button--2 artdeco-button--secondary');
 
-  for (var i = 0; i < elements.length; i++) {
-      if(elements[i].outerText === "Connect"){
-          elementConnectClick(elements[i]);
-          await sleep(1000);
-      }
-  }
-
-	console.log('Just added contacts: ' + contactsNum);
+    for (var i = 0; i < elements.length; i++) {
+        if(elements[i].outerText === "Connect"){
+            elementConnectClick(elements[i]);
+            await sleep(700);
+        }
+    }
 }
 
 pageScroll(countOfPagesScrolled);
